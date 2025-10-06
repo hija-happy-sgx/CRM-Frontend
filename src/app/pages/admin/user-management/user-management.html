@@ -1,0 +1,68 @@
+<div class="min-h-screen bg-gray-100 p-6">
+
+  <!-- Cards / Forms -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    
+    <!-- Add Manager -->
+    <div class="card bg-white shadow-md p-4">
+      <h3 class="font-bold mb-2">Add Manager</h3>
+      <form (ngSubmit)="addManager()" [formGroup]="managerForm">
+        <input formControlName="name" placeholder="Name" class="input w-full mb-2" />
+        <input formControlName="email" placeholder="Email" class="input w-full mb-2" />
+        <input formControlName="password" placeholder="Password" type="password" class="input w-full mb-2" />
+        <button class="btn btn-primary w-full">Add Manager</button>
+      </form>
+    </div>
+
+    <!-- Add SalesRepManager -->
+    <div class="card bg-white shadow-md p-4">
+      <h3 class="font-bold mb-2">Add SalesRepManager</h3>
+      <form (ngSubmit)="addSalesRepManager()" [formGroup]="srmForm">
+        <input formControlName="managerId" placeholder="Manager ID" class="input w-full mb-2" />
+        <input formControlName="name" placeholder="Name" class="input w-full mb-2" />
+        <input formControlName="email" placeholder="Email" class="input w-full mb-2" />
+        <input formControlName="password" placeholder="Password" type="password" class="input w-full mb-2" />
+        <button class="btn btn-primary w-full">Add SalesRepManager</button>
+      </form>
+    </div>
+
+    <!-- Add SalesRep -->
+    <div class="card bg-white shadow-md p-4">
+      <h3 class="font-bold mb-2">Add SalesRep</h3>
+      <form (ngSubmit)="addSalesRep()" [formGroup]="salesRepForm">
+        <input formControlName="srmId" placeholder="SalesRepManager ID" class="input w-full mb-2" />
+        <input formControlName="name" placeholder="Name" class="input w-full mb-2" />
+        <input formControlName="email" placeholder="Email" class="input w-full mb-2" />
+        <input formControlName="password" placeholder="Password" type="password" class="input w-full mb-2" />
+        <button class="btn btn-primary w-full">Add SalesRep</button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- Users Table -->
+  <div class="card bg-white shadow-md p-4">
+    <h2 class="text-xl font-semibold mb-4">All Users</h2>
+    <table class="table w-full table-zebra">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{user.id}}</td>
+          <td>{{user.name}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.role}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p *ngIf="error" class="text-red-500 mt-2">{{ error }}</p>
+  <p *ngIf="success" class="text-green-500 mt-2">{{ success }}</p>
+</div>

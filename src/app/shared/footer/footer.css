@@ -1,0 +1,52 @@
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #004d99; /* Primary CRM color */
+  color: #fff;
+  font-size: 0.875rem;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+
+  .footer-left {
+    font-weight: 500;
+  }
+
+  .footer-right {
+    display: flex;
+    gap: 1rem;
+
+    a {
+      color: #ffcc00;
+      text-decoration: none;
+      transition: color 0.3s;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+}
+
+
+/* .app-footer {
+  background-color: #004d99; 
+  color: #fff;
+  font-size: 0.875rem;
+
+  .p-toolbar-group-left {
+    font-weight: 500;
+  }
+
+  .p-toolbar-group-right {
+    button {
+      color: #ffcc00; 
+      border: none;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+} */

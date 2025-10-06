@@ -1,0 +1,89 @@
+
+<div class="min-h-screen bg-gray-100 flex flex-col">
+
+  <!-- Main Content -->
+  <main class="flex-1 p-6">
+    <div class="container mx-auto space-y-6">
+
+      <!-- Top Cards / Metrics -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="card bg-white shadow-md p-4">
+          <div class="text-gray-500">Total Users</div>
+          <div class="text-3xl font-bold">{{totalUsers}}</div>
+        </div>
+        <div class="card bg-white shadow-md p-4">
+          <div class="text-gray-500">Managers</div>
+          <div class="text-3xl font-bold">{{totalManagers}}</div>
+        </div>
+        <div class="card bg-white shadow-md p-4">
+          <div class="text-gray-500">Sales Reps</div>
+          <div class="text-3xl font-bold">{{totalSalesReps}}</div>
+        </div>
+        <div class="card bg-white shadow-md p-4">
+          <div class="text-gray-500">Pipeline Stages</div>
+          <div class="text-3xl font-bold">{{totalStages}}</div>
+        </div>
+      </div>
+
+      <!-- Tables Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Users Table -->
+        <div class="card bg-white shadow-md p-4">
+          <h2 class="text-xl font-semibold mb-4">Users</h2>
+          <table class="table w-full table-zebra">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users">
+                <td>{{user.id}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.role}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pipeline Stages Table -->
+        <div class="card bg-white shadow-md p-4">
+          <h2 class="text-xl font-semibold mb-4">Pipeline Stages</h2>
+          <table class="table w-full table-zebra">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Stage Name</th>
+                <th>Order</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let stage of stages">
+                <td>{{stage.id}}</td>
+                <td>{{stage.stageName}}</td>
+                <td>{{stage.order}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- Charts / Analytics Section -->
+      <div class="card bg-white shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-4">Sales Pipeline Overview</h2>
+        <div class="h-64">
+          <!-- Chart placeholder, e.g., Chart.js or ngx-charts -->
+          <canvas id="pipelineChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+ 
+
+</div>

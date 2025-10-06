@@ -1,0 +1,5 @@
+.content{
+    /* margin: 10rem;
+    padding: 2rem; */
+    min-height: 80vh; /* Adjust based on header and footer height */
+}
