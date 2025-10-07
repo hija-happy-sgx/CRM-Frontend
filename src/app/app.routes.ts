@@ -1,8 +1,11 @@
 import { Routes } from '@angular/router';
 import { Login } from './pages/auth/login/login';
 import { Dashboard } from './pages/admin/dashboard/dashboard';
-import { authGuardGuard } from './core/guards/auth-guard-guard';
 import { UserManagement } from './pages/admin/user-management/user-management';
+import { ManagerDashboard } from './pages/manager/manager-dashboard/manager-dashboard';
+import { SalesrepmanagerDashboard } from './pages/salesrepmanager/salesrepmanager-dashboard/salesrepmanager-dashboard';
+import { SalesrepDashboard } from './pages/salesrep/salesrep-dashboard/salesrep-dashboard';
+import { authGuard } from './core/guards/auth-guard-guard';
 
 export const routes: Routes = [
     // {path: '', redirectTo: 'login', pathMatch: 'full',component: Login},
@@ -15,22 +18,75 @@ export const routes: Routes = [
 
 
     { path: '', redirectTo: 'login/admin', pathMatch: 'full' },
+{ path: 'login', component: Login },
 
   // Login routes
   { path: 'login/:role', component: Login },
 
-  // Admin routes
+  // // Admin routes
+  // {
+  //   path: 'admin/dashboard',
+  //   component: Dashboard,
+  //   canActivate: [authGuardGuard] // Uncomment when AuthGuard is implemented
+  // },
+  // { 
+  //   path: 'admin/users', 
+  //   component: UserManagement, 
+  //   canActivate: [authGuardGuard] 
+  // },
+  
+  // // Manager routes
+  // {
+  //   path: 'manager/dashboard',
+  //   component: ManagerDashboard,
+  //   canActivate: [authGuardGuard] // Uncomment when AuthGuard is implemented
+  // },
+
+  // //SalesrepManager ROutes
+  // { 
+  //   path: 'salesrepmanager/dashboard', 
+  //   component: SalesrepmanagerDashboard, 
+  //   canActivate: [authGuardGuard] 
+  // },
+
+  // //SalesrepManager ROutes
+  // { 
+  //   path: 'salesrep/dashboard', 
+  //   component: SalesrepDashboard, 
+  //   canActivate: [authGuardGuard] 
+  // },
+
+
   {
     path: 'admin/dashboard',
-    component: Dashboard,
-    canActivate: [authGuardGuard] // Uncomment when AuthGuard is implemented
+    canActivate: [authGuard],
+    data: { roles: ['Admin'] },
+    loadComponent: () => import('./pages/admin/dashboard/dashboard').then(m => m.Dashboard)
   },
-  { 
-    path: 'admin/users', 
-    component: UserManagement, 
-    canActivate: [authGuardGuard] 
+  {
+    path: 'admin/users',
+    canActivate: [authGuard],
+    data: {roles: ['Admin']},
+    loadComponent: () => import('./pages/admin/user-management/user-management').then(m => m.UserManagement)
   },
-
+  {
+    path: 'manager/dashboard',
+    canActivate: [authGuard],
+    data: { roles: ['Manager'] },
+    loadComponent: () => import('./pages/manager/manager-dashboard/manager-dashboard').then(m => m.ManagerDashboard)
+  },
+  {
+    path: 'salesrepmanager/dashboard',
+    canActivate: [authGuard],
+    data: { roles: ['SalesRepManager'] },
+    loadComponent: () => import('./pages/salesrepmanager/salesrepmanager-dashboard/salesrepmanager-dashboard').then(m => m.SalesrepmanagerDashboard)
+  },
+  {
+    path: 'salesrep/dashboard',
+    canActivate: [authGuard],
+    data: { roles: ['SalesRep'] },
+    loadComponent: () => import('./pages/salesrep/salesrep-dashboard/salesrep-dashboard').then(m => m.SalesrepDashboard)
+  },
 
 
 

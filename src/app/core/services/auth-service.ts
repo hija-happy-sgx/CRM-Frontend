@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 interface LoginRequest {
   email: string;
@@ -20,7 +21,16 @@ interface LoginResponse {
 export class AuthService {
   private apiUrl = 'http://localhost:5264/api/Auth/login';
 
-  constructor(private http: HttpClient) { }
+  
+  // Role management
+  private roleSubject = new BehaviorSubject<string | null>(null);
+  role$ = this.roleSubject.asObservable();
+
+
+  constructor(private http: HttpClient, private router: Router) { }
+
+  
+
 
   // login(dto: { email: string; password: string; role: string }): Observable<any> {
   //   return this.http.post(`${this.baseUrl}/login`, dto);
@@ -33,15 +43,32 @@ export class AuthService {
   //   return this.http.post(`${this.baseUrl}/register`, dto);
   // }
 
-  saveToken(token: string) {
-    localStorage.setItem('authToken', token);
-  }
+ saveToken(token: string, role: string, userName: string) {
+  localStorage.setItem('authToken', token);
+  localStorage.setItem('role', role);
+  localStorage.setItem('userName', userName);
+  this.roleSubject.next(role);
+}
 
+getUserName(): string | null {
+  return localStorage.getItem('userName');
+}
   getToken(): string | null {
     return localStorage.getItem('authToken');
   }
 
+  getRole(): string | null {
+    return this.roleSubject.value || localStorage.getItem('role');
+  }
+
   logout() {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('role');
+    this.roleSubject.next(null);
+    
+  }
+
+   clearToken() {
+    this.logout(); // call logout logic
   }
 }

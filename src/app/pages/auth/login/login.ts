@@ -16,6 +16,9 @@ export class Login implements OnInit {
   role = 'Admin'; // default role
   error = '';
 
+roles: string[] = ['Admin', 'Manager', 'SalesRepManager', 'SalesRep']; // Dropdown roles
+
+
   constructor(
     private router: Router,
     private authService: AuthService
@@ -32,16 +35,26 @@ export class Login implements OnInit {
 
     this.authService.login(payload).subscribe({
       next: (res) => {
-       localStorage.setItem('token', res.token);
-        localStorage.setItem('role', res.role);
-        localStorage.setItem('user_id', res.user_id.toString());
+        console.log(res)
+        if (res && res.token) {
+          this.authService.saveToken(res.token, res.role, res.user_id.toString());
+          localStorage.setItem('user_id', res.user_id.toString());
 
-        console.log('Login successful', res);
-        this.router.navigate(['/admin/dashboard']);
+          alert(`Welcome ${res.role}! Login successful.`);
+          this.router.navigate([`/${res.role.toLowerCase()}/dashboard`]);
+        } else {
+          alert('Unexpected response from server.');
+        }
       },
       error: (err) => {
         console.error('Login failed', err);
-  this.error = `Invalid credentials or server error: ${err.message}`;      },
+        // Show a nice error message
+        if (err.status === 401 || err.status === 403) {
+          alert(`Invalid ${this.role} credentials. Please try again.`);
+        } else {
+          alert('Server error. Please try again later.');
+        }
+      },
     });
   }
 }

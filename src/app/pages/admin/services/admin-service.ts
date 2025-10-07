@@ -23,6 +23,16 @@ export class AdminService {
     return this.http.get(`${this.baseUrl}/users`,this.getAuthHeaders());
   }
 
+  getAllManagers(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/managers`, this.getAuthHeaders());
+  }
+  getAllSalesRepManagers(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/salesrepmanagers`, this.getAuthHeaders());
+  }
+  getAllSalesRep(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/salesrep`, this.getAuthHeaders());
+  }
+
     createManager(dto: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/manager`, dto, this.getAuthHeaders());
   }

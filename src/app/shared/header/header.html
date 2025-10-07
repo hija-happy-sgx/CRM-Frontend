@@ -1,59 +1,73 @@
-<!-- <header class="app-header">
-  <div class="logo">
-    <img src="https://cdn-icons-png.flaticon.com/512/3187/3187051.png" alt="MiniCRM Logo">
-  </div>
-
-  <div class="header-right">
-    <span class="user-name">Welcome, {{ userName }}</span>
-    <button class="logout-btn" (click)="logout()">Logout</button>
-  </div>
-</header>
-
-
- <p-menubar>
-  <div class="logo">
-<img src="https://cdn-icons-png.flaticon.com/512/3187/3187051.png" alt="CRM Logo" height="40">
-  </div>
-
-  <div class="user-menu">
-    <span>Welcome, {{ userName }}</span>
-    <button pButton type="button" label="Logout" icon="pi pi-sign-out" (click)="logout()"></button>
-  </div>
-</p-menubar> --> 
-
-
 <header class="bg-white shadow-md sticky top-0 z-50">
   <div class="container mx-auto flex items-center justify-between p-4">
     
     <!-- Logo / Brand -->
     <div class="flex items-center space-x-2">
       <span class="text-2xl font-bold text-primary">MiniCRM</span>
-      <span class="text-gray-400">Admin</span>
+      <span class="text-gray-400 capitalize">{{ userRole }}</span>
     </div>
 
-    <!-- Navigation / Links -->
-    <nav class="hidden md:flex space-x-4">
-      <a routerLink="/admin/dashboard" class="text-gray-600 hover:text-primary transition">Dashboard</a>
-      <a routerLink="/admin/users" class="text-gray-600 hover:text-primary transition">Users</a>
-      <a href="#" class="text-gray-600 hover:text-primary transition">Pipeline</a>
-      <a href="#" class="text-gray-600 hover:text-primary transition">Settings</a>
-    </nav>
+   <!-- Navigation / Links (Desktop) -->
+<nav class="hidden md:flex space-x-4">
+
+  <!-- Admin Links -->
+  <ng-container *ngIf="userRole === 'admin'">
+    <a routerLink="/admin/dashboard" class="btn btn-ghost">Dashboard</a>
+    <a routerLink="/admin/users" class="btn btn-ghost">Users</a>
+    <a routerLink="/admin/pipeline" class="btn btn-ghost">Pipeline</a>
+    <a routerLink="/admin/settings" class="btn btn-ghost">Settings</a>
+  </ng-container>
+
+  <!-- Manager Links -->
+  <ng-container *ngIf="userRole === 'Manager'">
+    <a routerLink="/manager/overview" class="btn btn-ghost">Overview</a>
+    <a routerLink="/manager/team" class="btn btn-ghost">Team</a>
+    <a routerLink="/manager/reports" class="btn btn-ghost">Reports</a>
+  </ng-container>
+
+  <!-- Sales Rep Links -->
+  <ng-container *ngIf="userRole === 'SalesRep'">
+    <a routerLink="/sales/leads" class="btn btn-ghost">Leads</a>
+    <a routerLink="/sales/opportunities" class="btn btn-ghost">Opportunities</a>
+    <a routerLink="/sales/clients" class="btn btn-ghost">Clients</a>
+  </ng-container>
+
+  <!-- Sales Rep Manager Links -->
+  <ng-container *ngIf="userRole === 'SalesRepManager'">
+    <a routerLink="/sales-manager/dashboard" class="btn btn-ghost">Dashboard</a>
+    <a routerLink="/sales-manager/team" class="btn btn-ghost">Sales Team</a>
+    <a routerLink="/sales-manager/targets" class="btn btn-ghost">Targets</a>
+    <a routerLink="/sales-manager/reports" class="btn btn-ghost">Reports</a>
+  </ng-container>
+
+</nav>
 
     <!-- User Menu / Profile -->
     <div class="flex items-center space-x-2">
-      <span class="text-gray-600 hidden md:block">Admin</span>
+      <span class="text-gray-600 hidden md:block">Welcome, {{ userName }}</span>
       <div class="avatar">
         <div class="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
           <img src="https://i.pravatar.cc/100" alt="profile"/>
         </div>
       </div>
+      <button class="btn btn-sm btn-outline ml-2" (click)="logout()">Logout</button>
     </div>
 
     <!-- Mobile Menu Button -->
-    <button class="md:hidden btn btn-ghost btn-circle" id="mobile-menu-btn">
+    <button class="md:hidden btn btn-ghost btn-circle" (click)="mobileMenuOpen = !mobileMenuOpen">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
       </svg>
     </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div *ngIf="mobileMenuOpen" class="md:hidden bg-white shadow-md">
+    <nav class="flex flex-col p-4 space-y-2">
+      <a *ngFor="let item of menuItems" [routerLink]="item.route" class="btn btn-ghost w-full">
+        {{ item.label }}
+      </a>
+      <button class="btn btn-outline mt-2 w-full" (click)="logout()">Logout</button>
+    </nav>
   </div>
 </header>

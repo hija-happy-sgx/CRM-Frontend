@@ -15,7 +15,7 @@
     </div>
 
     <!-- Add SalesRepManager -->
-    <div class="card bg-white shadow-md p-4">
+    <!-- <div class="card bg-white shadow-md p-4">
       <h3 class="font-bold mb-2">Add SalesRepManager</h3>
       <form (ngSubmit)="addSalesRepManager()" [formGroup]="srmForm">
         <input formControlName="managerId" placeholder="Manager ID" class="input w-full mb-2" />
@@ -24,13 +24,78 @@
         <input formControlName="password" placeholder="Password" type="password" class="input w-full mb-2" />
         <button class="btn btn-primary w-full">Add SalesRepManager</button>
       </form>
+    </div> -->
+
+
+    <!-- Add SalesRepManager -->
+<div class="card bg-white shadow-md p-4">
+  <h3 class="font-bold mb-2">Add SalesRepManager</h3>
+  <form (ngSubmit)="addSalesRepManager()" [formGroup]="srmForm">
+
+    <!-- Manager selection with autocomplete -->
+    <div class="relative mb-2">
+      <input
+  formControlName="managerName"
+  placeholder="Select Manager"
+  class="input w-full"
+  (input)="filterManagers()"
+  (focus)="showManagerList = true"
+/>
+<ul *ngIf="showManagerList && filteredManagers.length > 0"
+    class="absolute w-full bg-white border rounded shadow max-h-40 overflow-y-auto z-10">
+  <li *ngFor="let manager of filteredManagers"
+      (click)="selectManager(manager)"
+      class="p-2 hover:bg-gray-100 cursor-pointer">
+    {{ manager.name }} (ID: {{ manager.managerId }})
+  </li>
+</ul>
+
     </div>
+
+    <!-- Hidden managerId -->
+    <input type="hidden" formControlName="managerId" />
+
+    <!-- SalesRepManager details -->
+    <input formControlName="name" placeholder="Name" class="input w-full mb-2" />
+    <input formControlName="email" placeholder="Email" class="input w-full mb-2" />
+    <input formControlName="password" placeholder="Password" type="password" class="input w-full mb-2" />
+
+    <button class="btn btn-primary w-full">Add SalesRepManager</button>
+  </form>
+</div>
+
 
     <!-- Add SalesRep -->
     <div class="card bg-white shadow-md p-4">
       <h3 class="font-bold mb-2">Add SalesRep</h3>
       <form (ngSubmit)="addSalesRep()" [formGroup]="salesRepForm">
-        <input formControlName="srmId" placeholder="SalesRepManager ID" class="input w-full mb-2" />
+
+
+
+
+        <!-- <input formControlName="srmId" placeholder="SalesRepManager ID" class="input w-full mb-2" /> -->
+
+        <!-- SalesRepManager selection with autocomplete -->
+
+        <div class="relative mb-2">
+            <input
+        formControlName="srmName"
+        placeholder="Select SalesRepManager"
+        class="input w-full"
+        (input)="filterSalesRepManagers()"
+        (focus)="showSRMList = true"
+        />
+        <ul *ngIf="showSRMList && filteredSalesRepManagers.length > 0"
+            class="absolute w-full bg-white border rounded shadow max-h-40 overflow-y-auto z-10">
+        <li *ngFor="let srm of filteredSalesRepManagers"
+            (click)="selectSalesRepManager(srm)"
+            class="p-2 hover:bg-gray-100 cursor-pointer">
+            {{ srm.name }} (ID: {{ srm.srmId }})
+        </li>
+        </ul>
+
+    </div>
+
         <input formControlName="name" placeholder="Name" class="input w-full mb-2" />
         <input formControlName="email" placeholder="Email" class="input w-full mb-2" />
         <input formControlName="password" placeholder="Password" type="password" class="input w-full mb-2" />
