@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 export class Login implements OnInit {
   email = '';
   password = '';
-  role = 'Admin'; // default role
+  role = 'User'; // default role
   error = '';
 
 roles: string[] = ['Admin', 'Manager', 'SalesRepManager', 'SalesRep']; // Dropdown roles

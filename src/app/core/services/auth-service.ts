@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -29,6 +29,20 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
+
+   private getAuthHeaders() {
+    const token = localStorage.getItem('authToken');
+    console.log('Retrieved token:', token);
+    if (!token) {
+      console.warn('No token found in localStorage.');
+    }
+    return {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    };
+  }
+
   
 
 
@@ -36,7 +50,7 @@ export class AuthService {
   //   return this.http.post(`${this.baseUrl}/login`, dto);
   // }
    login(data: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(this.apiUrl, data);
+    return this.http.post<LoginResponse>(this.apiUrl, data, this.getAuthHeaders());
   }
 
   // register(dto: any): Observable<any> {
@@ -46,12 +60,15 @@ export class AuthService {
  saveToken(token: string, role: string, userId: number) {
   localStorage.setItem('authToken', token);
   localStorage.setItem('role', role);
-  localStorage.setItem('userId', userId.toString());
+  localStorage.setItem('user_id', userId.toString());
   this.roleSubject.next(role);
 }
 
 getUserName(): string | null {
   return localStorage.getItem('userName');
+}
+getUserId(): string | null {
+  return localStorage.getItem('user_id');
 }
   getToken(): string | null {
     return localStorage.getItem('authToken');
