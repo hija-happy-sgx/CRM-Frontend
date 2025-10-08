@@ -43,10 +43,10 @@ export class AuthService {
   //   return this.http.post(`${this.baseUrl}/register`, dto);
   // }
 
- saveToken(token: string, role: string, userName: string) {
+ saveToken(token: string, role: string, userId: number) {
   localStorage.setItem('authToken', token);
   localStorage.setItem('role', role);
-  localStorage.setItem('userName', userName);
+  localStorage.setItem('userId', userId.toString());
   this.roleSubject.next(role);
 }
 

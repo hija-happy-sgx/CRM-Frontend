@@ -2,10 +2,15 @@ import { Routes } from '@angular/router';
 import { Login } from './pages/auth/login/login';
 import { Dashboard } from './pages/admin/dashboard/dashboard';
 import { UserManagement } from './pages/admin/user-management/user-management';
-import { ManagerDashboard } from './pages/manager/manager-dashboard/manager-dashboard';
 import { SalesrepmanagerDashboard } from './pages/salesrepmanager/salesrepmanager-dashboard/salesrepmanager-dashboard';
 import { SalesrepDashboard } from './pages/salesrep/salesrep-dashboard/salesrep-dashboard';
 import { authGuard } from './core/guards/auth-guard-guard';
+import { TargetsComponent } from './pages/manager/targets/targets';
+import { Reports } from './pages/manager/reports/reports';
+import { SalesTeamComponent } from './pages/manager/sales-team/sales-team';
+import { ManagerDashboard } from './pages/manager/manager-dashboard/manager-dashboard';
+import { Leads } from './pages/salesrep/leads/leads';
+import { Opportunities } from './pages/salesrep/opportunities/opportunities';
 
 export const routes: Routes = [
     // {path: '', redirectTo: 'login', pathMatch: 'full',component: Login},
@@ -89,5 +94,12 @@ export const routes: Routes = [
   },
 
 
+   { path: 'manager/dashboard', component: ManagerDashboard },
+  { path: 'manager/team', component: SalesTeamComponent },
+  { path: 'manager/targets', component: TargetsComponent },
+  { path: 'manager/reports', component: Reports },
 
+   { path: 'sr/dashboard', component: SalesrepDashboard },
+  { path: 'sr/leads', component: Leads },
+  { path: 'sr/opportunities', component: Opportunities },
 ];

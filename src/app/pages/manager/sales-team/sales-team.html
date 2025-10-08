@@ -1,0 +1,104 @@
+<div class="min-h-screen bg-base-200 p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Sales Team Management</h1>
+    <button class="btn btn-primary" (click)="openAssignModal()">
+      Assign SRM
+    </button>
+  </div>
+
+  <!-- Sales Rep Managers Table -->
+  <div class="mb-8">
+    <h2 class="text-2xl font-semibold mb-4">Sales Rep Managers</h2>
+    <div *ngIf="loading" class="flex justify-center py-8">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+    <div *ngIf="!loading" class="overflow-x-auto">
+      <table class="table bg-base-100 shadow-xl">
+        <thead>
+          <tr>
+            <th>Manager ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Team Size</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let srm of salesRepManagers">
+            <td>{{srm.id}}</td>
+            <td>{{srm.name || 'SRM ' + srm.id}}</td>
+            <td>{{srm.email || 'srm@example.com'}}</td>
+            <td><span class="badge badge-info">{{srm.teamSize || 0}}</span></td>
+            <td><span class="badge badge-success">{{srm.status || 'Active'}}</span></td>
+          </tr>
+          <tr *ngIf="salesRepManagers.length === 0">
+            <td colspan="5" class="text-center py-4">No Sales Rep Managers found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Sales Representatives Table -->
+  <div>
+    <h2 class="text-2xl font-semibold mb-4">Sales Representatives</h2>
+    <div *ngIf="loading" class="flex justify-center py-8">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+    <div *ngIf="!loading" class="overflow-x-auto">
+      <table class="table bg-base-100 shadow-xl">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Manager</th>
+            <th>Leads</th>
+            <th>Deals</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let rep of salesReps">
+            <td>{{rep.id}}</td>
+            <td>{{rep.name || 'Sales Rep ' + rep.id}}</td>
+            <td>{{rep.managerName || 'Unassigned'}}</td>
+            <td><span class="badge badge-primary">{{rep.leadCount || 0}}</span></td>
+            <td><span class="badge badge-secondary">{{rep.dealCount || 0}}</span></td>
+            <td>
+              <button class="btn btn-sm btn-warning" (click)="openReassignModal(rep)">
+                Reassign
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="salesReps.length === 0">
+            <td colspan="6" class="text-center py-4">No Sales Representatives found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Assign SRM Modal -->
+  <div *ngIf="showAssignModal" class="modal modal-open">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Assign Sales Rep Manager</h3>
+      <input type="number" placeholder="Enter SRM ID" [(ngModel)]="newSrmId" class="input input-bordered w-full my-4">
+      <div class="modal-action">
+        <button class="btn btn-primary" (click)="assignSalesRepManager()">Assign</button>
+        <button class="btn btn-ghost" (click)="closeAssignModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reassign Sales Rep Modal -->
+  <div *ngIf="showReassignModal" class="modal modal-open">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Reassign {{selectedSalesRep?.name}}</h3>
+      <input type="number" placeholder="Enter new SRM ID" [(ngModel)]="selectedSRM" class="input input-bordered w-full my-4">
+      <div class="modal-action">
+        <button class="btn btn-warning" (click)="reassignSalesRep()">Reassign</button>
+        <button class="btn btn-ghost" (click)="closeReassignModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

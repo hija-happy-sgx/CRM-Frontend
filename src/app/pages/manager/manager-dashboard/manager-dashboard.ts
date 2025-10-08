@@ -1,86 +1,104 @@
 import { Component, OnInit } from '@angular/core';
-import { ManagerService } from '../service/manager-service';
 import { CommonModule } from '@angular/common';
+import { ManagerService, SalesRepManager, SalesRep, Lead, Deal } from '../manager-service';
 
 @Component({
-  selector: 'app-manager-dashboard',
+  selector: 'app-dashboard',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './manager-dashboard.html',
-  styleUrl: './manager-dashboard.css'
+  styleUrls: ['./manager-dashboard.css']
 })
-export class ManagerDashboard implements OnInit{
+export class ManagerDashboard implements OnInit {
   managerId!: number;
-  srmList: any[] = [];
-  salesReps: any[] = [];
-  leads: any[] = [];
-  deals: any[] = [];
-  error = '';
-  success = '';
+  loading: boolean = false;
 
-    constructor(private managerService: ManagerService) {}
+  salesRepManagers: SalesRepManager[] = [];
+  salesReps: SalesRep[] = [];
+  leads: Lead[] = [];
+  deals: Deal[] = [];
 
-  ngOnInit() {
+  constructor(private managerService: ManagerService) {}
+
+  ngOnInit(): void {
     const id = localStorage.getItem('user_id');
-    if (id) this.managerId = +id;
-    this.loadData();
-  }
-
-  loadData() {
-    this.loadSRMs();
-    this.loadSalesReps();
-    this.loadLeads();
-    this.loadDeals();
-  }
-
-loadSRMs() {
-  const managerId = localStorage.getItem('user_id'); 
-
-  if (!managerId) {
-    this.error = 'Manager ID not found. Please log in again.';
-    return;
-  }
-
-  // debugger
-  this.managerService.getSalesRepManagers(Number(managerId)).subscribe({
-    next: (res) => {
-      console.log('Full Response:', res);
-      this.srmList = res;
-      console.log('SRM List:', this.srmList);
-    },
-    error: (err) => {
-      console.error(err);
-      this.error = 'Failed to load SRMs.';
+    console.log('Manager ID from localStorage:', id);
+    if (!id) {
+      alert('Manager ID not found. Please log in.');
+      return;
     }
-  });
-}
-
-   loadLeads() {
-    this.managerService.getLeads(this.managerId).subscribe({
-      next: (res) => this.leads = res,
-      error: () => this.error = 'Failed to load Leads.'
-    });
+    this.managerId = +id;
+    this.loadDashboardData();
   }
 
-   loadSalesReps() {
-    this.managerService.getSalesReps(this.managerId).subscribe({
-      next: (res) => this.salesReps = res,
-      error: () => this.error = 'Failed to load SalesReps.'
-    });
-  }
-     loadDeals() {
-    this.managerService.getDeals(this.managerId).subscribe({
-      next: (res) => this.deals = res,
-      error: () => this.error = 'Failed to load Deals.'
-    });
+  loadDashboardData(): void {
+    this.fetchSalesRepManagers();
+    this.fetchSalesReps();
+    this.fetchLeads();
+    this.fetchDeals();
   }
 
-  approveDeal(dealId: number) {
-    this.managerService.approveDeal(this.managerId, dealId).subscribe({
-      next: () => {
-        alert('Deal approved successfully!');
-        this.loadDeals();
+  fetchSalesRepManagers(): void {
+    this.loading = true;
+    this.managerService.getSalesRepManagers(this.managerId).subscribe({
+      next: (data) => {
+        this.salesRepManagers = data;
+        this.loading = false;
       },
-      error: () => alert('Failed to approve deal.')
+      error: (err) => {
+        console.error('Error fetching SRMs:', err);
+        this.loading = false;
+      }
     });
+  }
+
+  fetchSalesReps(): void {
+    this.loading = true;
+    this.managerService.getSalesReps(this.managerId).subscribe({
+      next: (data) => {
+        this.salesReps = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching Sales Reps:', err);
+        this.loading = false;
+      }
+    });
+  }
+
+  fetchLeads(): void {
+    this.loading = true;
+    this.managerService.getLeads(this.managerId).subscribe({
+      next: (data) => {
+        this.leads = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching leads:', err);
+        this.loading = false;
+      }
+    });
+  }
+
+  fetchDeals(): void {
+    this.loading = true;
+    this.managerService.getDeals(this.managerId).subscribe({
+      next: (data) => {
+        this.deals = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching deals:', err);
+        this.loading = false;
+      }
+    });
+  }
+
+  get pendingDealsCount(): number {
+    return this.deals.filter(d => !d.approved).length;
+  }
+
+  get totalLeadsValue(): number {
+    return this.leads.reduce((sum, lead) => sum + (lead.value || 0), 0);
   }
 }

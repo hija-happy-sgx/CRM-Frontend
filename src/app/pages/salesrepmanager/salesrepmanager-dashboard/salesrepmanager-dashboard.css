@@ -1,0 +1,17 @@
+/* Horizontal scroll for pipeline cards */
+.flex.overflow-x-auto {
+  scrollbar-width: thin;
+}
+
+.flex.overflow-x-auto::-webkit-scrollbar {
+  height: 6px;
+}
+
+.flex.overflow-x-auto::-webkit-scrollbar-thumb {
+  background-color: #a0aec0;
+  border-radius: 10px;
+}
+
+.flex.overflow-x-auto::-webkit-scrollbar-track {
+  background-color: #edf2f7;
+}

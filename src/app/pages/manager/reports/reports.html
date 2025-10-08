@@ -1,0 +1,61 @@
+ <!-- Reports Tab (Deals) -->
+    <div *ngIf="activeTab === 'reports'">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Deals & Approvals</h1>
+        <button class="btn btn-primary" (click)="fetchDeals()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          Refresh
+        </button>
+      </div>
+
+      <div *ngIf="loading" class="flex justify-center py-8">
+        <span class="loading loading-spinner loading-lg"></span>
+      </div>
+      <div *ngIf="!loading" class="overflow-x-auto">
+        <table class="table bg-base-100 shadow-xl">
+          <thead>
+            <tr>
+              <th>Deal ID</th>
+              <th>Customer</th>
+              <th>Sales Rep</th>
+              <th>Amount</th>
+              <th>Stage</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let deal of deals">
+              <td>#{{deal.id}}</td>
+              <td>{{deal.customer || 'Customer ' + deal.id}}</td>
+              <td>{{deal.salesRep || 'N/A'}}</td>
+              <td class="font-bold text-success">${{deal.amount || 0 | number}}</td>
+              <td>{{deal.stage || 'Negotiation'}}</td>
+              <td>
+                <span class="badge" [ngClass]="deal.approved ? 'badge-success' : 'badge-warning'">
+                  {{deal.approved ? 'Approved' : 'Pending'}}
+                </span>
+              </td>
+              <td>
+                <button 
+                  *ngIf="!deal.approved"
+                  class="btn btn-sm btn-success" 
+                  (click)="approveDeal(deal.id)">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  Approve
+                </button>
+                <span *ngIf="deal.approved" class="text-success">✓ Approved</span>
+              </td>
+            </tr>
+            <tr *ngIf="deals.length === 0">
+              <td colspan="7" class="text-center py-4">No deals found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+ 

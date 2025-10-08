@@ -17,47 +17,64 @@ export class Header implements OnInit {
   menuItems: { label: string; route: string }[] = [];
   mobileMenuOpen = false;
 
-  constructor(private authService: AuthService, private route: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {
-   this.userRole = this.authService.getRole();
-   console.log('User role in header:', this.userRole);
-  this.userName = this.authService.getUserName() || 'User';
-  // this.setMenuItems();
+  
+   ngOnInit(): void {
+    // Subscribe to role changes
+    this.authService.role$.subscribe(role => {
+      this.userRole = role;
+      this.setMenuItems();
+    });
+
+    // Set userName from localStorage
+    this.userName = this.authService.getUserName() || 'User';
+
+    // Initial menu items (in case role is already saved in localStorage)
+    this.userRole = this.authService.getRole();
+    this.setMenuItems();
   }
 
   logout(): void {
     this.authService.clearToken();
-  this.route.navigate(['/login']);
-    // Redirect to login page if needed
+    this.userRole = null;  // Clear role
+    this.userName = '';
+    this.setMenuItems();   // Reset navbar
+    this.router.navigate(['/login']);
   }
 
-  // setMenuItems() {
-  //   const navLinks: Record<string, { label: string; route: string }[]> = {
-  //     admin: [
-  //       { label: 'Dashboard', route: '/admin/dashboard' },
-  //       { label: 'Users', route: '/admin/users' },
-  //       { label: 'Pipeline', route: '/admin/pipeline' },
-  //       { label: 'Settings', route: '/admin/settings' }
-  //     ],
-  //     manager: [
-  //       { label: 'Overview', route: '/manager/overview' },
-  //       { label: 'Team', route: '/manager/team' },
-  //       { label: 'Reports', route: '/manager/reports' }
-  //     ],
-  //     salesrep: [
-  //       { label: 'Leads', route: '/sales/leads' },
-  //       { label: 'Opportunities', route: '/sales/opportunities' },
-  //       { label: 'Clients', route: '/sales/clients' }
-  //     ],
-  //     salesrep_manager: [
-  //       { label: 'Dashboard', route: '/sales-manager/dashboard' },
-  //       { label: 'Sales Team', route: '/sales-manager/team' },
-  //       { label: 'Targets', route: '/sales-manager/targets' },
-  //       { label: 'Reports', route: '/sales-manager/reports' }
-  //     ]
-  //   };
+  
+  setMenuItems(): void {
+    const navLinks: Record<string, { label: string; route: string }[]> = {
+      Admin: [
+        { label: 'Dashboard', route: '/admin/dashboard' },
+        { label: 'Users', route: '/admin/users' },
+        { label: 'Pipeline', route: '/admin/pipeline' },
+        { label: 'Settings', route: '/admin/settings' }
+      ],
+      Manager: [
+        { label: 'Dashboard', route: '/manager/dashboard' },
+        { label: 'Sales Team', route: '/manager/team' },
+        { label: 'Targets', route: '/manager/targets' },
+        { label: 'Reports', route: '/manager/reports' }
+      ],
+      SalesRep: [
+        { label: 'Dashboard', route: '/sr/dashboard' },
+        { label: 'Leads', route: '/sr/leads' },
+        { label: 'Opportunites', route: '/sr/opportunities' }
+      ],
+      SalesRepManager: [
+        { label: 'Dashboard', route: '/sales-manager/dashboard' },
+        { label: 'Sales Team', route: '/sales-manager/team' },
+        { label: 'Targets', route: '/sales-manager/targets' },
+        { label: 'Reports', route: '/sales-manager/reports' }
+      ],
+      default: [
+        { label: 'Home', route: '/' },
+        { label: 'Login', route: '/login' }
+      ]
+    };
 
-  //   this.menuItems = navLinks[this.userRole || ''] || [];
-  // }
+     this.menuItems = navLinks[this.userRole || 'default'] || navLinks['default'];
+  }
 }

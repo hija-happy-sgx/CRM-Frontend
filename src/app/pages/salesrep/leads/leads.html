@@ -1,0 +1,224 @@
+ <div class="min-h-screen bg-base-200 p-6">
+      <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+          <div>
+            <h1 class="text-4xl font-bold text-base-content">Leads</h1>
+            <p class="text-base-content/60 mt-2">Manage your sales leads</p>
+          </div>
+          <button class="btn btn-primary" (click)="showAddLeadModal = true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Add New Lead
+          </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <div class="stats shadow bg-base-100">
+            <div class="stat">
+              <div class="stat-title">Total Leads</div>
+              <div class="stat-value text-primary">{{ leads.length }}</div>
+            </div>
+          </div>
+          <div class="stats shadow bg-base-100">
+            <div class="stat">
+              <div class="stat-title">New</div>
+              <div class="stat-value text-secondary">{{ getLeadsByStatus('New').length }}</div>
+            </div>
+          </div>
+          <div class="stats shadow bg-base-100">
+            <div class="stat">
+              <div class="stat-title">Contacted</div>
+              <div class="stat-value text-accent">{{ getLeadsByStatus('Contacted').length }}</div>
+            </div>
+          </div>
+          <div class="stats shadow bg-base-100">
+            <div class="stat">
+              <div class="stat-title">Qualified</div>
+              <div class="stat-value text-success">{{ getLeadsByStatus('Qualified').length }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="card bg-base-100 shadow-xl mb-6">
+          <div class="card-body">
+            <div class="flex flex-wrap gap-4">
+              <div class="form-control">
+                <input type="text" placeholder="Search leads..." class="input input-bordered w-full max-w-xs" [(ngModel)]="searchTerm" (input)="filterLeads()">
+              </div>
+              <div class="form-control">
+                <select class="select select-bordered w-full max-w-xs" [(ngModel)]="filterStatus" (change)="filterLeads()">
+                  <option value="">All Status</option>
+                  <option value="New">New</option>
+                  <option value="Contacted">Contacted</option>
+                  <option value="Qualified">Qualified</option>
+                  <option value="Unqualified">Unqualified</option>
+                </select>
+              </div>
+              <div class="form-control">
+                <select class="select select-bordered w-full max-w-xs" [(ngModel)]="filterSource" (change)="filterLeads()">
+                  <option value="">All Sources</option>
+                  <option value="Website">Website</option>
+                  <option value="Referral">Referral</option>
+                  <option value="Cold Call">Cold Call</option>
+                  <option value="Email">Email</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Leads Table -->
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <div class="overflow-x-auto">
+              <table class="table table-zebra">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Company</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                    <th>Source</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let lead of filteredLeads">
+                    <td>
+                      <div class="font-bold">{{ lead.firstName }} {{ lead.lastName }}</div>
+                    </td>
+                    <td>{{ lead.company }}</td>
+                    <td>
+                      <div class="text-sm">{{ lead.email }}</div>
+                      <div class="text-sm text-base-content/60">{{ lead.phone }}</div>
+                    </td>
+                    <td>
+                      <div class="badge" [ngClass]="{
+                        'badge-success': lead.status === 'Qualified',
+                        'badge-primary': lead.status === 'New',
+                        'badge-secondary': lead.status === 'Contacted',
+                        'badge-error': lead.status === 'Unqualified'
+                      }">{{ lead.status }}</div>
+                    </td>
+                    <td>{{ lead.source }}</td>
+                    <td>{{ lead.createdAt | date:'short' }}</td>
+                    <td>
+                      <div class="flex gap-2">
+                        <button class="btn btn-sm btn-ghost" (click)="viewLead(lead)">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                        </button>
+                        <button class="btn btn-sm btn-ghost" (click)="editLead(lead)">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr *ngIf="!filteredLeads.length">
+                    <td colspan="7" class="text-center text-base-content/60">No leads found</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Lead Modal -->
+        <div class="modal" [class.modal-open]="showAddLeadModal">
+          <div class="modal-box w-11/12 max-w-2xl">
+            <h3 class="font-bold text-lg mb-4">Add New Lead</h3>
+            <form (submit)="createLead()">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-control">
+                  <label class="label"><span class="label-text">First Name</span></label>
+                  <input type="text" class="input input-bordered" [(ngModel)]="newLead.firstName" name="firstName" required>
+                </div>
+                <div class="form-control">
+                  <label class="label"><span class="label-text">Last Name</span></label>
+                  <input type="text" class="input input-bordered" [(ngModel)]="newLead.lastName" name="lastName" required>
+                </div>
+                <div class="form-control">
+                  <label class="label"><span class="label-text">Email</span></label>
+                  <input type="email" class="input input-bordered" [(ngModel)]="newLead.email" name="email" required>
+                </div>
+                <div class="form-control">
+                  <label class="label"><span class="label-text">Phone</span></label>
+                  <input type="tel" class="input input-bordered" [(ngModel)]="newLead.phone" name="phone" required>
+                </div>
+                <div class="form-control">
+                  <label class="label"><span class="label-text">Company</span></label>
+                  <input type="text" class="input input-bordered" [(ngModel)]="newLead.company" name="company" required>
+                </div>
+                <div class="form-control">
+                  <label class="label"><span class="label-text">Source</span></label>
+                  <select class="select select-bordered" [(ngModel)]="newLead.source" name="source" required>
+                    <option value="">Select source</option>
+                    <option value="Website">Website</option>
+                    <option value="Referral">Referral</option>
+                    <option value="Cold Call">Cold Call</option>
+                    <option value="Email">Email</option>
+                  </select>
+                </div>
+              </div>
+              <div class="modal-action">
+                <button type="button" class="btn" (click)="showAddLeadModal = false">Cancel</button>
+                <button type="submit" class="btn btn-primary">Create Lead</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- View Lead Modal -->
+        <div class="modal" [class.modal-open]="showViewLeadModal">
+          <div class="modal-box w-11/12 max-w-2xl">
+            <h3 class="font-bold text-lg mb-4">Lead Details</h3>
+            <div *ngIf="selectedLead" class="space-y-4">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-sm text-base-content/60">Name</p>
+                  <p class="font-semibold">{{ selectedLead.firstName }} {{ selectedLead.lastName }}</p>
+                </div>
+                <div>
+                  <p class="text-sm text-base-content/60">Company</p>
+                  <p class="font-semibold">{{ selectedLead.company }}</p>
+                </div>
+                <div>
+                  <p class="text-sm text-base-content/60">Email</p>
+                  <p class="font-semibold">{{ selectedLead.email }}</p>
+                </div>
+                <div>
+                  <p class="text-sm text-base-content/60">Phone</p>
+                  <p class="font-semibold">{{ selectedLead.phone }}</p>
+                </div>
+                <div>
+                  <p class="text-sm text-base-content/60">Status</p>
+                  <div class="badge badge-lg" [ngClass]="{
+                    'badge-success': selectedLead.status === 'Qualified',
+                    'badge-primary': selectedLead.status === 'New',
+                    'badge-secondary': selectedLead.status === 'Contacted',
+                    'badge-error': selectedLead.status === 'Unqualified'
+                  }">{{ selectedLead.status }}</div>
+                </div>
+                <div>
+                  <p class="text-sm text-base-content/60">Source</p>
+                  <p class="font-semibold">{{ selectedLead.source }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="modal-action">
+              <button class="btn" (click)="showViewLeadModal = false">Close</button>
+              <button class="btn btn-primary" (click)="editLead(selectedLead!)">Edit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

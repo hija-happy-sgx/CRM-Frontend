@@ -1,73 +1,70 @@
-<div class="p-6">
+<div class="container mx-auto p-6">
   <h1 class="text-3xl font-bold mb-6">Manager Dashboard</h1>
 
-  <!-- SalesRep Managers -->
-  <section class="mb-8">
-    <h2 class="text-xl font-semibold mb-2">SalesRep Managers</h2>
-    <table class="table w-full border">
-      <thead>
-        <tr>
-          <th>ID</th><th>Name</th><th>Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let srm of srmList">
-          <td>{{ srm.srmId }}</td>
-          <td>{{ srm.name }}</td>
-          <td>{{ srm.email }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Sales Rep Managers -->
+    <div class="stat bg-base-100 shadow-xl rounded-lg">
+      <div class="stat-title">Sales Rep Managers</div>
+      <div class="stat-value text-primary">{{ salesRepManagers.length }}</div>
+      <div class="stat-desc">Active managers</div>
+    </div>
 
-  <!-- Sales Reps -->
-  <section class="mb-8">
-    <h2 class="text-xl font-semibold mb-2">Sales Representatives</h2>
-    <table class="table w-full border">
-      <thead>
-        <tr>
-          <th>ID</th><th>Name</th><th>Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let rep of salesReps">
-          <td>{{ rep.salesRepId }}</td>
-          <td>{{ rep.name }}</td>
-          <td>{{ rep.email }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+    <!-- Sales Reps -->
+    <div class="stat bg-base-100 shadow-xl rounded-lg">
+      <div class="stat-title">Sales Reps</div>
+      <div class="stat-value text-secondary">{{ salesReps.length }}</div>
+      <div class="stat-desc">Team members</div>
+    </div>
 
-  <!-- Deals -->
-  <section class="mb-8">
-    <h2 class="text-xl font-semibold mb-2">Deals</h2>
-    <table class="table w-full border">
-      <thead>
-        <tr>
-          <th>ID</th><th>Title</th><th>Status</th><th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let deal of deals">
-          <td>{{ deal.id }}</td>
-          <td>{{ deal.title }}</td>
-          <td>{{ deal.status }}</td>
-          <td>
-            <button *ngIf="deal.status !== 'Approved'" class="btn btn-success btn-sm" (click)="approveDeal(deal.id)">
-              Approve
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+    <!-- Leads -->
+    <div class="stat bg-base-100 shadow-xl rounded-lg">
+      <div class="stat-title">Active Leads</div>
+      <div class="stat-value text-accent">{{ leads.length }}</div>
+      <div class="stat-desc">${{ totalLeadsValue | number }} total value</div>
+    </div>
 
-  <!-- Leads -->
-  <section>
-    <h2 class="text-xl font-semibold mb-2">Leads</h2>
-    <ul>
-      <li *ngFor="let lead of leads">{{ lead.name }} — {{ lead.status }}</li>
-    </ul>
-  </section>
+    <!-- Deals -->
+    <div class="stat bg-base-100 shadow-xl rounded-lg">
+      <div class="stat-title">Active Deals</div>
+      <div class="stat-value text-success">{{ deals.length }}</div>
+      <div class="stat-desc">{{ pendingDealsCount }} pending approval</div>
+    </div>
+  </div>
+
+  <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">Quick Actions</h2>
+        <div class="space-y-2">
+          <a routerLink="/manager/team" class="btn btn-primary btn-block">Manage Sales Team</a>
+          <a routerLink="/manager/targets" class="btn btn-secondary btn-block">View Leads</a>
+          <a routerLink="/manager/reports" class="btn btn-accent btn-block">Review Deals</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">Team Overview</h2>
+        <div class="text-sm">
+          <div class="flex justify-between mb-2">
+            <span>Total Team Members:</span>
+            <span class="font-bold">{{ salesRepManagers.length + salesReps.length }}</span>
+          </div>
+          <div class="flex justify-between mb-2">
+            <span>Active Leads:</span>
+            <span class="font-bold">{{ leads.length }}</span>
+          </div>
+          <div class="flex justify-between mb-2">
+            <span>Pending Approvals:</span>
+            <span class="font-bold">{{ pendingDealsCount }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Total Pipeline Value:</span>
+            <span class="font-bold">${{ totalLeadsValue | number }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

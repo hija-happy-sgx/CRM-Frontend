@@ -8,9 +8,9 @@
     </div>
 
    <!-- Navigation / Links (Desktop) -->
-<nav class="hidden md:flex space-x-4">
+<!-- <nav class="hidden md:flex space-x-4">
 
-  <!-- Admin Links -->
+  
   <ng-container *ngIf="userRole === 'admin'">
     <a routerLink="/admin/dashboard" class="btn btn-ghost">Dashboard</a>
     <a routerLink="/admin/users" class="btn btn-ghost">Users</a>
@@ -18,29 +18,40 @@
     <a routerLink="/admin/settings" class="btn btn-ghost">Settings</a>
   </ng-container>
 
-  <!-- Manager Links -->
-  <ng-container *ngIf="userRole === 'Manager'">
-    <a routerLink="/manager/overview" class="btn btn-ghost">Overview</a>
-    <a routerLink="/manager/team" class="btn btn-ghost">Team</a>
-    <a routerLink="/manager/reports" class="btn btn-ghost">Reports</a>
-  </ng-container>
+  
+<ng-container *ngIf="userRole === 'Manager'">
+  <a routerLink="/manager/dashboard" routerLinkActive="btn-active" class="btn btn-ghost">Dashboard</a>
+  <a routerLink="/manager/team" routerLinkActive="btn-active" class="btn btn-ghost">SalesTeam</a>
+  <a routerLink="/manager/targets" routerLinkActive="btn-active" class="btn btn-ghost">Targets</a>
+  <a routerLink="/manager/reports" routerLinkActive="btn-active" class="btn btn-ghost">Reports</a>
+</ng-container>
 
-  <!-- Sales Rep Links -->
+
   <ng-container *ngIf="userRole === 'SalesRep'">
     <a routerLink="/sales/leads" class="btn btn-ghost">Leads</a>
     <a routerLink="/sales/opportunities" class="btn btn-ghost">Opportunities</a>
     <a routerLink="/sales/clients" class="btn btn-ghost">Clients</a>
   </ng-container>
 
-  <!-- Sales Rep Manager Links -->
+
   <ng-container *ngIf="userRole === 'SalesRepManager'">
     <a routerLink="/sales-manager/dashboard" class="btn btn-ghost">Dashboard</a>
+
     <a routerLink="/sales-manager/team" class="btn btn-ghost">Sales Team</a>
+
     <a routerLink="/sales-manager/targets" class="btn btn-ghost">Targets</a>
+
     <a routerLink="/sales-manager/reports" class="btn btn-ghost">Reports</a>
   </ng-container>
 
+</nav> -->
+
+<nav class="hidden md:flex space-x-4">
+  <ng-container *ngFor="let item of menuItems">
+    <a [routerLink]="item.route" routerLinkActive="btn-active" class="btn btn-ghost">{{ item.label }}</a>
+  </ng-container>
 </nav>
+
 
     <!-- User Menu / Profile -->
     <div class="flex items-center space-x-2">

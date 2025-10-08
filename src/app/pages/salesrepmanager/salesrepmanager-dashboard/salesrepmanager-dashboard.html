@@ -1,1 +1,137 @@
-<p>salesrepmanager-dashboard works!</p>
+<div class="p-6 bg-gray-100 min-h-screen">
+  <h1 class="text-3xl font-bold mb-6">SalesRep Manager Dashboard</h1>
+
+  <!-- Dashboard Summary Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <div class="card bg-white shadow-md p-4">
+      <div class="card-body">
+        <h2 class="card-title">Total Sales Reps</h2>
+        <p class="text-2xl font-bold">{{ dashboard.totalSalesReps }}</p>
+      </div>
+    </div>
+
+    <div class="card bg-white shadow-md p-4">
+      <div class="card-body">
+        <h2 class="card-title">Active Leads</h2>
+        <p class="text-2xl font-bold">{{ dashboard.activeLeads }}</p>
+      </div>
+    </div>
+
+    <div class="card bg-white shadow-md p-4">
+      <div class="card-body">
+        <h2 class="card-title">Deals Closed</h2>
+        <p class="text-2xl font-bold">{{ dashboard.dealsClosed }}</p>
+      </div>
+    </div>
+
+    <div class="card bg-white shadow-md p-4">
+      <div class="card-body">
+        <h2 class="card-title">Pipeline Value</h2>
+        <p class="text-2xl font-bold">${{ dashboard.pipelineValue | number }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sales Reps Table -->
+  <div class="card bg-white shadow-md mb-6 p-4">
+    <h2 class="text-xl font-bold mb-4">Sales Reps</h2>
+    <table class="table w-full">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Assigned Leads</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rep of salesReps">
+          <td>{{ rep.name }}</td>
+          <td>{{ rep.email }}</td>
+          <td>{{ rep.assignedLeads }}</td>
+          <td>
+            <button class="btn btn-sm btn-primary" (click)="openAssignLeadModal(rep)">Assign Lead</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Leads Table -->
+  <div class="card bg-white shadow-md mb-6 p-4">
+    <h2 class="text-xl font-bold mb-4">Team Leads</h2>
+    <table class="table w-full">
+      <thead>
+        <tr>
+          <th>Lead Name</th>
+          <th>Email</th>
+          <th>Status</th>
+          <th>Assigned To</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let lead of leads">
+          <td>{{ lead.name }}</td>
+          <td>{{ lead.email }}</td>
+          <td>{{ lead.status }}</td>
+          <td>{{ lead.salesRepName || 'Unassigned' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Deals Table -->
+  <div class="card bg-white shadow-md mb-6 p-4">
+    <h2 class="text-xl font-bold mb-4">Team Deals</h2>
+    <table class="table w-full">
+      <thead>
+        <tr>
+          <th>Deal Name</th>
+          <th>Amount</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let deal of deals">
+          <td>{{ deal.name }}</td>
+          <td>${{ deal.amount | number }}</td>
+          <td>{{ deal.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pipeline Stages -->
+<div class="card bg-white shadow-md p-4 mb-6">
+  <h2 class="text-xl font-bold mb-4">Pipeline Stages</h2>
+  <div class="flex overflow-x-auto space-x-4">
+    <div *ngFor="let stage of pipelineStages" class="min-w-[200px] bg-gray-50 p-4 rounded-lg shadow hover:shadow-lg transition">
+      <h3 class="font-bold mb-2">{{ stage.name }}</h3>
+      <p class="text-gray-600 mb-2">Deals: {{ stage.deals?.length || 0 }}</p>
+
+      <ul class="list-disc list-inside">
+        <li *ngFor="let deal of stage.deals">
+          <span class="font-semibold">{{ deal.name }}</span> - ${{ deal.amount | number }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Assign Lead Modal -->
+  <input type="checkbox" id="assignLeadModal" class="modal-toggle" />
+  <div class="modal">
+    <div class="modal-box relative">
+      <label for="assignLeadModal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+      <h3 class="text-lg font-bold mb-4">Assign Lead to {{ selectedRep?.name }}</h3>
+      
+      <select [(ngModel)]="selectedLeadId" class="select select-bordered w-full mb-4">
+        <option *ngFor="let lead of unassignedLeads" [value]="lead.id">{{ lead.name }}</option>
+      </select>
+      <button class="btn btn-primary w-full" (click)="assignLead()">Assign Lead</button>
+    </div>
+  </div>
+
+  
+</div>

@@ -12,6 +12,10 @@ export class AdminService {
 
    private getAuthHeaders() {
     const token = localStorage.getItem('token');
+    console.log('Retrieved token:', token);
+    if (!token) {
+      console.warn('No token found in localStorage.');
+    }
     return {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${token}`

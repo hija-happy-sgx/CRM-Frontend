@@ -37,7 +37,7 @@ roles: string[] = ['Admin', 'Manager', 'SalesRepManager', 'SalesRep']; // Dropdo
       next: (res) => {
         console.log(res)
         if (res && res.token) {
-          this.authService.saveToken(res.token, res.role, res.user_id.toString());
+          this.authService.saveToken(res.token, res.role, res.user_id);
           localStorage.setItem('user_id', res.user_id.toString());
 
           alert(`Welcome ${res.role}! Login successful.`);
